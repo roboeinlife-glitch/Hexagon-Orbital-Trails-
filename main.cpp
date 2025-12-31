@@ -18,7 +18,7 @@ int main() {
                             "Hexagon Orbital Trails");
     window.setFramerateLimit(60);
 
-    const float HEX_RADIUS = 60.f;
+    const float HEX_RADIUS = 40.f;
     sf::CircleShape hexagon(HEX_RADIUS, 6);
     hexagon.setFillColor(sf::Color::Transparent);
     hexagon.setOutlineThickness(3);
@@ -31,9 +31,9 @@ int main() {
     std::vector<sf::Color> spacedVertexTrailColors(3);
     // 1. Trắng sáng
     spacedVertexTrailColors[0] = sf::Color(255, 255, 255);      // Trắng
-   // 2. Tím nhạt
-    //spacedVertexTrailColors[1] = sf::Color(200, 150, 255);      // Tím pastel
-   // 3. Vàng cam
+    //2. Tím nhạt
+    spacedVertexTrailColors[1] = sf::Color(200, 150, 255);      // Tím pastel
+    //3. Vàng cam
     spacedVertexTrailColors[2] = sf::Color(255, 200, 50);       // Vàng cam
     // === 6 màu ngẫu nhiên riêng biệt cho 6 trail pixel ===
     std::vector<sf::Color> pixelTrailColors(6);
@@ -49,7 +49,7 @@ int main() {
     float rotationAngle = 0.0f;
     float orbitSpeed = 1.0f;
     float rotationSpeed = 2.0f;
-    float orbitRadius = 150.0f;
+    float orbitRadius = 50.0f;
 
     std::vector<std::deque<sf::Vertex>> spacedVertexTrails(3);     // 3 trail đường
     std::vector<std::deque<sf::Vertex>> shortEndPixelTrails(6);     // 6 trail pixel
@@ -108,7 +108,7 @@ int main() {
             for (int k = -1; k <= 1; k += 2) {
                 float angle = baseAngle + k * (PI / 3.0f);
                 sf::Vector2f shortDir(std::cos(angle), std::sin(angle));
-                sf::Vector2f shortEnd = v + shortDir * 40.0f;
+                sf::Vector2f shortEnd = v + shortDir * 50.0f;
 
                 // Vẽ đoạn ngắn xanh lá
                 sf::VertexArray shortLine(sf::Lines, 2);
