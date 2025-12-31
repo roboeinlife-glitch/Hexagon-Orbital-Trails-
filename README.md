@@ -87,9 +87,10 @@ Mở Pull Request
 
 Cảm ơn đặc biệt đến:
 
-SFML community vì thư viện tuyệt vời
+ [SFML 2.5.x](https://www.sfml-dev.org/download.php) community vì thư viện tuyệt vời
 
 🤖 Grok AI (xAI) – đã giúp mình viết nền tảng code ban đầu
+
 🚀 DeepSeek AI – đã kiên nhẫn sửa lỗi và tối ưu!
 
 Dự án này là kết quả của sự hợp tác vui vẻ giữa con người và hai trợ lý AI tuyệt vời. ❤️
