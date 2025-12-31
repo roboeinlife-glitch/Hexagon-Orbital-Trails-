@@ -89,8 +89,8 @@ Cảm ơn đặc biệt đến:
 
 SFML community vì thư viện tuyệt vời
 
-🤖 DeepSeek AI – đã giúp mình viết nền tảng code ban đầu
-🚀 Grok AI (xAI) – đã kiên nhẫn sửa lỗi, tối ưu và thêm hiệu ứng đẹp đến tận cùng!
+🤖 Grok AI (xAI) – đã giúp mình viết nền tảng code ban đầu
+🚀 DeepSeek AI – đã kiên nhẫn sửa lỗi và tối ưu!
 
 Dự án này là kết quả của sự hợp tác vui vẻ giữa con người và hai trợ lý AI tuyệt vời. ❤️
 
