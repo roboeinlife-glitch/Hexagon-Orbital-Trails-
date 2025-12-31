@@ -22,13 +22,20 @@ int main() {
     sf::CircleShape hexagon(HEX_RADIUS, 6);
     hexagon.setFillColor(sf::Color::Transparent);
     hexagon.setOutlineThickness(3);
-    hexagon.setOutlineColor(sf::Color(255, 127, 80));
+    hexagon.setOutlineColor(sf::Color(255, 127, 80)); // Coral
     hexagon.setOrigin(HEX_RADIUS, HEX_RADIUS);
 
-    sf::Color trailFromSpacedVerticesColor = sf::Color::Yellow;
-    sf::Color shortLinesColor = sf::Color::Green;
+    sf::Color shortLinesColor = sf::Color::Green; // Đoạn ngắn màu xanh lá
 
-    // Tạo 6 màu ngẫu nhiên riêng biệt cho 6 trail pixel (cố định suốt chương trình)
+    // === 3 màu ngẫu nhiên riêng biệt cho 3 trail đường từ đỉnh chẵn (0,2,4) ===
+    std::vector<sf::Color> spacedVertexTrailColors(3);
+    // 1. Trắng sáng
+    spacedVertexTrailColors[0] = sf::Color(255, 255, 255);      // Trắng
+   // 2. Tím nhạt
+    //spacedVertexTrailColors[1] = sf::Color(200, 150, 255);      // Tím pastel
+   // 3. Vàng cam
+    spacedVertexTrailColors[2] = sf::Color(255, 200, 50);       // Vàng cam
+    // === 6 màu ngẫu nhiên riêng biệt cho 6 trail pixel ===
     std::vector<sf::Color> pixelTrailColors(6);
     for (int i = 0; i < 6; i++) {
         pixelTrailColors[i] = sf::Color(
@@ -44,8 +51,8 @@ int main() {
     float rotationSpeed = 2.0f;
     float orbitRadius = 150.0f;
 
-    std::vector<std::deque<sf::Vertex>> spacedVertexTrails(3);
-    std::vector<std::deque<sf::Vertex>> shortEndPixelTrails(6); // 6 trails pixel
+    std::vector<std::deque<sf::Vertex>> spacedVertexTrails(3);     // 3 trail đường
+    std::vector<std::deque<sf::Vertex>> shortEndPixelTrails(6);     // 6 trail pixel
 
     while (window.isOpen()) {
         sf::Event event;
@@ -69,11 +76,15 @@ int main() {
             vertices[i] = hexagon.getTransform().transformPoint(hexagon.getPoint(i));
         }
 
-        // === 1. Trails đường từ 3 đỉnh chẵn (0, 2, 4) ===
+        // === 1. 3 TRAILS ĐƯỜNG TỪ ĐỈNH CHẴN (0, 2, 4) - MỖI TRAIL MỘT MÀU RIÊNG ===
         int trailIdx = 0;
         for (int i = 0; i < 6; i += 2) {
             sf::Vector2f v = vertices[i];
-            spacedVertexTrails[trailIdx].push_back(sf::Vertex(v, trailFromSpacedVerticesColor));
+
+            // Dùng màu riêng cho từng trail
+            sf::Color currentTrailColor = spacedVertexTrailColors[trailIdx];
+
+            spacedVertexTrails[trailIdx].push_back(sf::Vertex(v, currentTrailColor));
 
             if (spacedVertexTrails[trailIdx].size() > 1) {
                 sf::VertexArray trailVA(sf::LineStrip);
@@ -85,33 +96,30 @@ int main() {
             trailIdx++;
         }
 
-        // === 2. Vẽ 6 đoạn ngắn và 6 trail pixel từ các đầu đoạn ===
+        // === 2. VẼ 6 ĐOẠN NGẮN XANH LÁ VÀ 6 TRAIL PIXEL MÀU RIÊNG ===
         int pixelTrailIdx = 0;
-        for (int i = 0; i < 6; ++i) { // Duyệt hết 6 đỉnh
+        for (int i = 0; i < 6; ++i) {
+            if (i % 2 == 0) continue; // Chỉ lấy đỉnh lẻ (1,3,5) làm gốc đoạn ngắn
+
             sf::Vector2f v = vertices[i];
-
-            // Chỉ xử lý các đỉnh lẻ (1,3,5) làm gốc cho đoạn ngắn, vì đoạn ngắn xuất phát từ đó
-            if (i % 2 == 0) continue; // Bỏ qua đỉnh chẵn
-
             sf::Vector2f dirToVertex = v - hexagon.getPosition();
             float baseAngle = std::atan2(dirToVertex.y, dirToVertex.x);
 
-            for (int k = -1; k <= 1; k += 2) { // hai hướng: +60° và -60°
+            for (int k = -1; k <= 1; k += 2) {
                 float angle = baseAngle + k * (PI / 3.0f);
                 sf::Vector2f shortDir(std::cos(angle), std::sin(angle));
                 sf::Vector2f shortEnd = v + shortDir * 40.0f;
 
-                // Vẽ đoạn ngắn màu xanh lá
+                // Vẽ đoạn ngắn xanh lá
                 sf::VertexArray shortLine(sf::Lines, 2);
                 shortLine[0] = sf::Vertex(v, shortLinesColor);
                 shortLine[1] = sf::Vertex(shortEnd, shortLinesColor);
                 window.draw(shortLine);
 
-                // Thêm điểm vào trail pixel tương ứng với màu cố định
+                // Trail pixel với màu riêng
                 sf::Color pixelColor = pixelTrailColors[pixelTrailIdx];
                 shortEndPixelTrails[pixelTrailIdx].push_back(sf::Vertex(shortEnd, pixelColor));
 
-                // Vẽ trail pixel
                 if (!shortEndPixelTrails[pixelTrailIdx].empty()) {
                     sf::VertexArray pixelVA(sf::Points);
                     for (const auto& vertex : shortEndPixelTrails[pixelTrailIdx]) {
@@ -120,7 +128,7 @@ int main() {
                     window.draw(pixelVA);
                 }
 
-                pixelTrailIdx++; // Tăng chỉ số trail
+                pixelTrailIdx++;
             }
         }
 
